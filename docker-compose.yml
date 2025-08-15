@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  converter:
+    build: ./converter
+    # 把本机 ./data 目录挂载到容器 /data
+    volumes:
+      - ./data:/data
+    working_dir: /data
+    # 用法：docker compose run --rm converter <输入文件> -o <输出目录>
+    # 例如：docker compose run --rm converter input.las -o /data/out_mycloud
+
+  potree:
+    build: ./potree
+    ports:
+      - "1234:1234"
+    # 把本机 ./data 挂到 Potree 的 pointclouds 目录，浏览器里直接能访问你的数据
+    volumes:
+      - ./data:/app/pointclouds
+      - ./my_example.html:/app/examples/my_example.html
+    # 前端只要运行，不需要特权
